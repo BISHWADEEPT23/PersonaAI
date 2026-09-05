@@ -1,0 +1,18 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Explicit deny by default for all top-level roots
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Owner-isolated interaction boundary
+    match /users/{userId}/interactions/{interactionId} {
+      allow read, write: if request.auth != null 
+                         && request.auth.uid == userId
+                         && request.resource.data.userId == userId;
+      allow delete: if request.auth != null && request.auth.uid == userId;
+    }
+  }
+}
