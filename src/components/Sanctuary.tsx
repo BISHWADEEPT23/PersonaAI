@@ -501,7 +501,7 @@ export default function Sanctuary() {
                 </>
               ) : (
                 <>
-                  <span>Analyze</span>
+                  <span>Reflect</span>
                   <Send className="w-3.5 h-3.5" />
                 </>
               )}
