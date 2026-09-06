@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,300;1,9..144,400;1,9..144,500;1,9..144,600;1,9..144,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&display=swap');
 @import "tailwindcss";
 
 @theme {
@@ -101,4 +104,76 @@
   .btn-soft:active {
     transform: scale(0.98);
   }
+}
+
+@layer base {
+  :root {
+    --bg: #eae5dc;
+    --ink: #1a1612;
+    --ink-muted: #6b6256;
+    --ink-faint: #a09890;
+    --green-dark: #1f3320;
+    --navy: #0d1b2e;
+    --cream-card: #f3ede3;
+    --lavender: #e4dff5;
+    --lavender-dark: #7c6fbf;
+    --accent-green: #3ecf6a;
+    --accent-italic: #6b7c3a;
+    --border-subtle: rgba(26,22,18,0.12);
+  }
+}
+
+@layer components {
+  .progress-bar {
+    height: 3px;
+    border-radius: 2px;
+    background: rgba(255,255,255,0.15);
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    border-radius: 2px;
+    background: var(--accent-green);
+  }
+  .progress-bar.light { background: rgba(26,22,18,0.12); }
+  .progress-fill.light { background: var(--accent-italic); }
+  .progress-fill.lavender { background: var(--lavender-dark); }
+  .progress-bar.lavender-bg { background: rgba(124,111,191,0.2); }
+
+  .dot-green::before {
+    content: '';
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent-green);
+    margin-right: 6px;
+    flex-shrink: 0;
+  }
+  .dot-muted::before {
+    content: '';
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--ink-faint);
+    margin-right: 6px;
+    flex-shrink: 0;
+  }
+  .dot-lavender::before {
+    content: '';
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--lavender-dark);
+    margin-right: 6px;
+    flex-shrink: 0;
+  }
+}
+
+@theme {
+  --font-serif: "Fraunces", serif;
+  --font-mono: "DM Mono", monospace;
+  --font-sans: "DM Sans", sans-serif;
 }

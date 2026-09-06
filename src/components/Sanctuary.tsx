@@ -497,7 +497,7 @@ export default function Sanctuary() {
               {isAnalyzing ? (
                 <>
                   <span className="w-3 h-3 border-2 border-zinc-950 border-t-transparent rounded-full animate-spin" />
-                  <span>{isScrubbing ? "Scrubbing PII..." : "Reflecting..."}</span>
+                  <span>"Reflecting..."</span>
                 </>
               ) : (
                 <>

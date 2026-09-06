@@ -5,7 +5,8 @@ import {
   ShieldCheck, 
   Camera, 
   Compass, 
-  ArrowRight, 
+  ArrowRight,
+  ArrowLeft, 
   Lock, 
   Eye, 
   BookOpen, 
@@ -53,7 +54,7 @@ const DEMO_LENSES = {
   }
 };
 
-type PersonaKey = 'student' | 'researcher' | 'caregiver';
+type PersonaKey = 'student' | 'researcher' | 'caregiver' | 'hardware';
 
 export default function Login() {
   const navigate = useNavigate();
@@ -72,7 +73,7 @@ export default function Login() {
   const [otpCode, setOtpCode] = useState('');
   const [confirmationResult, setConfirmationResult] = useState<any>(null);
 
-  const personas: Record<PersonaKey, { label: string; raw: string; solution: string }> = {
+  const personas: Record<PersonaKey, { label: string; raw: string; solution: string; isUpcoming?: boolean }> = {
     student: {
       label: "Late-Night Exam Cramming",
       raw: "Quant section mock test was brutal. Can't focus, 2:00 AM, heart racing looking at exam date.",
@@ -87,6 +88,12 @@ export default function Login() {
       label: "Caregiver Sensory Overload",
       raw: "Constant noise and demands all day. Zero time to myself, feeling irritable and guilty.",
       solution: "Provides a 60-second somatic box-breathing anchor to down-regulate panic."
+    },
+    hardware: {
+      label: "Smart Pen Sync",
+      isUpcoming: true,
+      raw: "I want to write in my physical leather notebook, but I need the AI to securely analyze my cognitive patterns over time.",
+      solution: "Syncs physical ink strokes via encrypted Bluetooth directly into your private digital vault."
     }
   };
 
@@ -168,8 +175,15 @@ export default function Login() {
     <div className="relative min-h-screen bg-sanctuary-bg text-sanctuary-text flex flex-col justify-between p-4 sm:p-8 transition-colors duration-300">
       <CalmParticles />
       {/* 1. Header with Verification Badges */}
-      <header className="max-w-5xl w-full mx-auto flex items-center justify-between py-2 border-b border-sanctuary-border">
+      <header className="max-w-5xl w-full mx-auto flex items-center justify-between py-2 border-b border-sanctuary-border relative">
         <div className="flex items-center gap-2.5">
+          <button 
+            onClick={() => navigate(-1)}
+            className="mr-2 p-2 -ml-2 text-sanctuary-muted hover:text-sanctuary-text transition-colors rounded-full hover:bg-sanctuary-surface"
+            title="Go Back"
+          >
+            <ArrowLeft className="w-5 h-5" />
+          </button>
           <div className="w-10 h-10 rounded-xl bg-sanctuary-surface border border-sanctuary-border text-sanctuary-text flex items-center justify-center overflow-hidden shadow-soft">
             <PeacockQuillNibLogo className="w-9 h-12" />
           </div>
@@ -232,14 +246,25 @@ export default function Login() {
               {(Object.keys(personas) as PersonaKey[]).map((key) => (
                 <button
                   key={key}
-                  onClick={() => setSelectedPersona(key)}
-                  className={`text-xs px-3 py-1.5 rounded-xl border transition ${
+                  onClick={() => {
+                    if (key === 'hardware') {
+                      navigate('/product');
+                    } else {
+                      setSelectedPersona(key);
+                    }
+                  }}
+                  className={`flex items-center gap-2 text-xs px-3 py-1.5 rounded-xl border transition ${
                     selectedPersona === key
                       ? 'bg-sanctuary-blue/10 text-sanctuary-blue font-medium border-sanctuary-blue/20 shadow-sm'
                       : 'bg-sanctuary-bg text-sanctuary-muted border-transparent hover:border-sanctuary-border'
                   }`}
                 >
-                  {personas[key].label}
+                  <span>{personas[key].label}</span>
+                  {personas[key].isUpcoming && (
+                    <span className="text-[9px] uppercase tracking-wider font-semibold px-1.5 py-0.5 rounded-md bg-sanctuary-blue/20 text-sanctuary-blue">
+                      Upcoming
+                    </span>
+                  )}
                 </button>
               ))}
             </div>

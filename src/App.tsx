@@ -10,6 +10,9 @@ import { auth } from './firebase';
 import Login from './components/Login';
 import Sanctuary from './components/Sanctuary';
 import MindfulLanding from './components/MindfulLanding';
+import LabsTransitionWrapper from './pages/LabsTransitionWrapper';
+import GenReflectProduct from './pages/GenReflectProduct';
+import Philosophy from './pages/Philosophy';
 import { Loader2 } from 'lucide-react';
 import { useSystemTheme } from './hooks/useSystemTheme';
 
@@ -38,6 +41,9 @@ export default function App() {
   return (
     <Routes>
       <Route path="/welcome" element={user ? <Navigate to="/" replace /> : <MindfulLanding />} />
+      <Route path="/philosophy" element={<Philosophy />} />
+      <Route path="/labs" element={<LabsTransitionWrapper />} />
+      <Route path="/product" element={<GenReflectProduct />} />
       <Route path="/login" element={user ? <Navigate to="/" replace /> : <Login />} />
       <Route path="/" element={user ? <Sanctuary /> : <Navigate to="/welcome" replace />} />
       <Route path="*" element={<Navigate to="/" replace />} />

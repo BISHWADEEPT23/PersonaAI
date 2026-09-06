@@ -3,7 +3,6 @@ import { motion, useReducedMotion, Variants } from 'motion/react';
 import { useNavigate } from 'react-router-dom';
 import { PeacockQuillNibLogo } from './PeacockQuillNibLogo';
 import { CalmParticles } from './CalmParticles';
-import { LabsPreviewModal } from './LabsPreviewModal';
 
 export default function MindfulLanding() {
   const shouldReduceMotion = useReducedMotion();
@@ -95,14 +94,14 @@ export default function MindfulLanding() {
           <div className="relative animate-[float_6s_ease-in-out_infinite]">
             <PeacockQuillNibLogo 
               className="w-44 h-56 sm:w-48 sm:h-64 drop-shadow-[0_12px_28px_rgba(12,62,69,0.18)]" 
-              onNibClick={() => setShowLabsModal(true)} 
+              onNibClick={() => navigate('/product')} 
             />
           </div>
         </div>
 
         <button
           type="button"
-          onClick={() => setShowLabsModal(true)}
+          onClick={() => navigate('/product')}
           aria-label="Hardware Labs Preview"
           title="Hardware Labs Preview"
           className="relative mb-6 p-2 rounded-full 
@@ -142,7 +141,7 @@ export default function MindfulLanding() {
           </button>
 
           <button
-            onClick={() => {}}
+            onClick={() => navigate('/philosophy')}
             type="button"
             className="w-full sm:w-auto min-w-[190px] px-8 py-3.5 rounded-2xl 
                        bg-white/70 dark:bg-stone-900/60 

@@ -128,8 +128,8 @@ async function verifyToken(req: express.Request, res: express.Response, next: ex
 
 // API Routes
 async function generateContentWithFallback(contents: any[], config: any) {
-  const models = ["gemini-2.5-flash", "gemini-3.6-flash", "gemini-3.1-flash-lite", "gemini-flash-latest"];
-  const aiClient = getGenAI();
+  const models = ["gemini-3.6-flash", "gemini-3.1-flash-lite", "gemini-flash-latest", "gemini-3.7-flash"];
+  const aiClient = await getGeminiClient();
   let lastError = null;
 
   for (const model of models) {
@@ -449,7 +449,7 @@ Output strictly valid JSON matching the schema:
 
 app.post("/api/gemini/chat", verifyToken, async (req, res) => {
   try {
-    const aiClient = getGenAI();
+    const aiClient = await getGeminiClient();
     const { message, history } = req.body;
 
     if (!message) {
@@ -462,19 +462,18 @@ app.post("/api/gemini/chat", verifyToken, async (req, res) => {
       parts: [{ text: msg.content }]
     }));
 
-    const response = await aiClient.models.generateContent({
-      model: "gemini-2.5-flash",
-      contents: [
+    const response = await generateContentWithFallback(
+      [
         ...formattedHistory,
         {
           role: "user",
           parts: [{ text: message }]
         }
       ],
-      config: {
+      {
         systemInstruction: "You are a helpful and thoughtful journaling assistant. You help the user reflect on their day, brainstorm ideas, or summarize thoughts. Keep responses concise and insightful."
       }
-    });
+    );
 
     res.json({ reply: response.text });
   } catch (error: any) {
@@ -485,7 +484,7 @@ app.post("/api/gemini/chat", verifyToken, async (req, res) => {
 
 app.post("/api/gemini/summarize", verifyToken, async (req, res) => {
   try {
-    const aiClient = getGenAI();
+    const aiClient = await getGeminiClient();
     const { history } = req.body;
 
     if (!history || history.length === 0) {
@@ -495,18 +494,17 @@ app.post("/api/gemini/summarize", verifyToken, async (req, res) => {
 
     const formattedHistory = history.map((msg: any) => `${msg.role === 'user' ? 'User' : 'AI'}: ${msg.content}`).join('\n\n');
 
-    const response = await aiClient.models.generateContent({
-      model: "gemini-2.5-flash",
-      contents: [
+    const response = await generateContentWithFallback(
+      [
         {
           role: "user",
           parts: [{ text: `Based on the following journal conversation, generate a short, insightful title (max 5 words) and a brief 2-3 sentence summary reflecting the main thoughts or mood. Return the result strictly as a JSON object with "title" and "summary" keys.\n\nConversation:\n${formattedHistory}` }]
         }
       ],
-      config: {
+      {
         responseMimeType: "application/json"
       }
-    });
+    );
 
     const resultText = response.text;
     const json = JSON.parse(resultText);
